@@ -10,6 +10,12 @@ const transcribeAudio = async (req, res) => {
     const transcript = await deepgramService.transcribeFile(req.file.buffer);
     
     console.log('Transcript:', transcript);
+    
+    // Check if transcript is empty or just whitespace
+    if (!transcript || transcript.trim() === '') {
+      return res.json({ transcript: 'Voice not audible, please try again' });
+    }
+    
     res.json({ transcript });
   } catch (err) {
     console.error("STT controller error:", err.message);
